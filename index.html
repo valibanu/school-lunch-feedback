@@ -13,19 +13,22 @@
   h1{font-size:26px;margin:0 0 4px}
   p.sub{color:#7b8794;margin:0 0 24px}
   ul{list-style:none;padding:0}
-  li{margin:0 0 10px}
-  a{display:block;background:#fff;border:1px solid #e4e7eb;border-radius:10px;padding:14px 18px;
-    text-decoration:none;color:#2b5797;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-  a:hover{border-color:#2b5797}
+  li{margin:0 0 18px}
+  .wk{font-weight:700;font-size:15px;margin:0 0 6px}
+  .links{display:flex;gap:10px;flex-wrap:wrap}
+  .links a{flex:1;min-width:160px;background:#fff;border:1px solid #e4e7eb;border-radius:10px;
+    padding:12px 16px;text-decoration:none;color:#2b5797;font-weight:600;text-align:center;
+    box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .links a:hover{border-color:#2b5797}
   footer{color:#7b8794;font-size:12px;margin-top:24px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>School Lunch Feedback</h1>
-  <p class="sub">Weekly reports compiled from family feedback.</p>
+  <p class="sub">Reports compiled from family feedback — a weekly summary and the day-by-day detail.</p>
   <ul>
-    <li><a href="report-2026-06-08.html">Week of June 8, 2026</a></li>
+    <li><div class="wk">Week of June 8, 2026</div><div class="links"><a href="report-weekly-2026-06-08.html">📊 Weekly summary</a><a href="report-2026-06-08.html">📅 Day-by-day</a></div></li>
   </ul>
   <footer>Children's names in comments are replaced with [child] for privacy.</footer>
 </div>
