@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<title>School Lunch Feedback — week of 2026-06-15</title>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#fff; --ink:#1f2933; --muted:#7b8794; --line:#e4e7eb;
+  --good:#137a4b; --good-bg:#e7f5ed; --mid:#9a6700; --mid-bg:#fff6e0; --bad:#a4262c; --bad-bg:#fdeceb;
+  --accent:#2b5797;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+.page-head{max-width:880px;margin:0 auto 8px}
+.page-head h1{margin:0 0 2px;font-size:26px}
+.sub{margin:0;color:var(--muted)}
+.part{max-width:880px;margin:0 auto}
+.part-title{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  border-bottom:1px solid var(--line);padding-bottom:6px;margin:28px 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:0 0 18px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.placeholder{color:var(--muted);font-style:italic}
+.day-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+.day-head h3{margin:0;font-size:20px}
+.muted{color:var(--muted);font-weight:400}
+.pill{background:#eef2f7;color:var(--accent);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+.pill-zero{background:#f0f1f3;color:var(--muted)}
+.scorecards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 6px}
+.sc{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fbfcfd}
+.sc-label{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:6px}
+.sc-val{font-size:24px;font-weight:700}
+.sc-sub{font-size:12px;color:var(--muted)}
+.sc-note{font-size:12px;color:var(--muted);margin-top:4px;font-style:italic}
+.sc-meter{height:6px;border-radius:6px;background:#eceff2;margin-top:8px;overflow:hidden}
+.sc-meter span{display:block;height:100%;background:var(--accent)}
+.sc.good{background:var(--good-bg)} .sc.good .sc-val{color:var(--good)} .sc.good .sc-meter span{background:var(--good)}
+.sc.mid{background:var(--mid-bg)}  .sc.mid .sc-val{color:var(--mid)}   .sc.mid .sc-meter span{background:var(--mid)}
+.sc.bad{background:var(--bad-bg)}  .sc.bad .sc-val{color:var(--bad)}   .sc.bad .sc-meter span{background:var(--bad)}
+details.dist,details.comments{margin:6px 0;border:1px solid var(--line);border-radius:8px;padding:4px 12px;background:#fbfcfd}
+details summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600;padding:4px 0}
+.bar-row{display:grid;grid-template-columns:140px 1fr 90px;align-items:center;gap:10px;margin:6px 0}
+.bar-label{font-size:13px}
+.bar-track{background:#eceff2;border-radius:6px;height:14px;overflow:hidden}
+.bar-fill{display:block;height:100%;background:var(--accent);border-radius:6px}
+.bar-num{font-size:12px;color:var(--muted);text-align:right}
+h4{margin:18px 0 8px;font-size:15px}
+.rank-table{width:100%;border-collapse:collapse;font-size:14px}
+.rank-table th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);
+  border-bottom:1px solid var(--line);padding:6px 8px}
+.rank-table td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.rank-table td.rank{width:28px;color:var(--muted);font-weight:700}
+.rank-table td.avg{white-space:nowrap}
+.rank-table td.votes{white-space:nowrap;width:90px}
+.rank-table tr.good td.avg strong{color:var(--good)}
+.rank-table tr.mid  td.avg strong{color:var(--mid)}
+.rank-table tr.bad  td.avg strong{color:var(--bad)}
+.rank-table tr.good{background:linear-gradient(90deg,var(--good-bg),transparent 60%)}
+.rank-table tr.mid{background:linear-gradient(90deg,var(--mid-bg),transparent 60%)}
+.rank-table tr.bad{background:linear-gradient(90deg,var(--bad-bg),transparent 60%)}
+.hidden-note{font-size:12px;margin:8px 0 0}
+.cc-table td.delta-cell{white-space:nowrap;font-size:13px}
+.cc-table td.votes{width:110px;color:var(--muted)}
+.delta{font-weight:600}
+.delta.down{color:var(--bad)} .delta.up{color:var(--good)}
+.rank-table tr.suspect{background:linear-gradient(90deg,var(--bad-bg),transparent 70%)}
+.rank-table tr.suspect td.avg strong{color:var(--bad)}
+.flag{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--bad);
+  border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+.cc-lead{margin:10px 0 2px;font-size:13px;font-weight:600;color:var(--muted)}
+.cc-comments{margin:4px 0 12px;padding-left:20px}
+.cc-comments li{margin:5px 0}
+h4 .muted{font-weight:400;font-size:13px}
+.analysis{border-left:3px solid var(--accent);padding:2px 0 2px 14px;margin:6px 0 10px}
+.analysis p{margin:4px 0}
+.tag{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);
+  font-weight:700;margin-right:6px}
+.standouts{margin-top:8px}
+.standouts ul{list-style:none;padding:0;margin:6px 0}
+.standouts li{margin:5px 0;padding-left:2px}
+.standouts .dot{margin-right:6px}
+.comments ul{margin:6px 0;padding-left:20px}
+.comments li{margin:5px 0}
+.analysis-pending{font-style:italic}
+.page-foot{max-width:880px;margin:24px auto 0;color:var(--muted);font-size:12px}
+@media (max-width:640px){.scorecards{grid-template-columns:1fr}.bar-row{grid-template-columns:110px 1fr 70px}}
+</style>
+</head>
+<body>
+<header class="page-head">
+  <h1>School Lunch Feedback</h1>
+  <p class="sub">Week of <strong>June 15, 2026</strong> · 30 total responses · generated 2026-06-22 14:52</p>
+</header>
+
+<section class="part">
+  <h2 class="part-title">Part 1 — Day by day</h2>
+  <div class="card day">
+  <div class="day-head">
+    <h3>Monday <span class="muted">· June 15, 2026</span></h3>
+    <span class="pill">14 responses</span>
+  </div>
+
+  <div class="scorecards">
+    <div class="sc mid">
+    <div class="sc-label">How much they ate</div>
+    <div class="sc-val">1.14 / 2</div>
+    <div class="sc-meter"><span style="width:57.14285714285714%"></span></div>
+  </div>
+    <div class="sc bad">
+    <div class="sc-label">Portion size</div>
+    <div class="sc-val">43%</div>
+    <div class="sc-sub">of the right size</div>
+    <div class="sc-meter"><span style="width:42.857142857142854%"></span></div>
+    <div class="sc-note">leans &quot;Too little&quot;</div>
+  </div>
+    <div class="sc mid">
+    <div class="sc-label">Temperature</div>
+    <div class="sc-val">62%</div>
+    <div class="sc-sub">served just right</div>
+    <div class="sc-meter"><span style="width:61.53846153846154%"></span></div>
+    <div class="sc-note">leans &quot;Too cold&quot;</div>
+  </div>
+  </div>
+
+  <details class="dist"><summary>How much they ate — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">All of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:14.285714285714285%"></span></span>
+      <span class="bar-num">2 · 14%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Some of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:85.71428571428571%"></span></span>
+      <span class="bar-num">12 · 86%</span>
+    </div></details>
+  <details class="dist"><summary>Portion size — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Too little</span>
+      <span class="bar-track"><span class="bar-fill" style="width:35.714285714285715%"></span></span>
+      <span class="bar-num">5 · 36%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:42.857142857142854%"></span></span>
+      <span class="bar-num">6 · 43%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Too much</span>
+      <span class="bar-track"><span class="bar-fill" style="width:21.428571428571427%"></span></span>
+      <span class="bar-num">3 · 21%</span>
+    </div></details>
+  <details class="dist"><summary>Temperature — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Too cold</span>
+      <span class="bar-track"><span class="bar-fill" style="width:38.46153846153847%"></span></span>
+      <span class="bar-num">5 · 38%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:61.53846153846154%"></span></span>
+      <span class="bar-num">8 · 62%</span>
+    </div></details>
+
+  <h4>Dish ranking <span class="muted">(best to worst · only dishes with 3+ ratings)</span></h4>
+  <table class="rank-table">
+    <thead><tr><th>#</th><th>Dish</th><th>Avg</th><th>Votes</th></tr></thead>
+    <tbody>
+    <tr class="good">
+      <td class="rank">1</td>
+      <td class="dish">Fel principal / Main course: File de cod pane/Breaded Cod Fish File</td>
+      <td class="avg"><strong>2.63</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">8 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">2</td>
+      <td class="dish">Legume / Vegetables: Mix de legume la abur/ Mix Steamed Veggies</td>
+      <td class="avg"><strong>2.29</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">7 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">3</td>
+      <td class="dish">Salad Option</td>
+      <td class="avg"><strong>2.25</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">4 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">4</td>
+      <td class="dish">Desert / Dessert: Fruct de sezon/ Fresh Seasonal Fruit</td>
+      <td class="avg"><strong>2.11</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">9 ratings</td>
+    </tr>
+    <tr class="mid">
+      <td class="rank">5</td>
+      <td class="dish">Ciorbăsau supa / Borsch or Soup: Ciorba de gaina cu leustean/ Chicken Soup with Lovage</td>
+      <td class="avg"><strong>1.57</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">7 ratings</td>
+    </tr></tbody>
+  </table><p class="muted hidden-note">Not ranked — fewer than 3 ratings: Vegetarian / Vegetarian: Mancare de praz cu masline/ Leek &amp; Olives Stew (1).</p>
+
+  <h4>Cold food — what was on those plates <span class="muted">(5 responses — 5 rated the meal “Too cold”)</span></h4>
+    <table class="rank-table cc-table">
+      <thead><tr><th>Dish</th><th>In these answers</th><th>Their rating</th><th>vs overall</th></tr></thead>
+      <tbody><tr class="">
+      <td class="dish">Desert / Dessert: Fruct de sezon/ Fresh Seasonal Fruit</td>
+      <td class="votes">4 of 5</td>
+      <td class="avg"><strong>2.25</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta up">+0.14</span> <span class="muted">vs 2.11</span></td>
+    </tr><tr class="">
+      <td class="dish">Ciorbăsau supa / Borsch or Soup: Ciorba de gaina cu leustean/ Chicken Soup with Lovage</td>
+      <td class="votes">1 of 5</td>
+      <td class="avg"><strong>1.00</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta down">-0.57</span> <span class="muted">vs 1.57</span></td>
+    </tr><tr class="">
+      <td class="dish">Salad Option</td>
+      <td class="votes">2 of 5</td>
+      <td class="avg"><strong>2.00</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta down">-0.25</span> <span class="muted">vs 2.25</span></td>
+    </tr><tr class="">
+      <td class="dish">Fel principal / Main course: File de cod pane/Breaded Cod Fish File</td>
+      <td class="votes">2 of 5</td>
+      <td class="avg"><strong>2.50</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta down">-0.13</span> <span class="muted">vs 2.63</span></td>
+    </tr><tr class="">
+      <td class="dish">Vegetarian / Vegetarian: Mancare de praz cu masline/ Leek &amp; Olives Stew</td>
+      <td class="votes">1 of 5</td>
+      <td class="avg"><strong>1.00</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta ">+0.00</span> <span class="muted">vs 1.00</span></td>
+    </tr></tbody>
+    </table>
+    <p class="muted hidden-note">Showing the top 5 of 6 dishes these children ate.</p>
+    <p class="muted">No comment named a specific dish — the table is simply what these children ate.</p>
+  <h4>Small portions — what was on those plates <span class="muted">(5 responses — 5 rated portion “Too little”)</span></h4>
+    <table class="rank-table cc-table">
+      <thead><tr><th>Dish</th><th>In these answers</th><th>Their rating</th></tr></thead>
+      <tbody><tr class="suspect">
+      <td class="dish">Ciorbăsau supa / Borsch or Soup: Ciorba de gaina cu leustean/ Chicken Soup with Lovage <span class="flag">likely small</span></td>
+      <td class="votes">5 of 5</td>
+      <td class="avg"><strong>1.20</strong> <span class="muted">/ 3</span></td>
+      
+    </tr><tr class="">
+      <td class="dish">Legume / Vegetables: Mix de legume la abur/ Mix Steamed Veggies</td>
+      <td class="votes">4 of 5</td>
+      <td class="avg"><strong>2.00</strong> <span class="muted">/ 3</span></td>
+      
+    </tr><tr class="">
+      <td class="dish">Fel principal / Main course: File de cod pane/Breaded Cod Fish File</td>
+      <td class="votes">4 of 5</td>
+      <td class="avg"><strong>2.50</strong> <span class="muted">/ 3</span></td>
+      
+    </tr><tr class="">
+      <td class="dish">Desert / Dessert: Fruct de sezon/ Fresh Seasonal Fruit</td>
+      <td class="votes">3 of 5</td>
+      <td class="avg"><strong>1.33</strong> <span class="muted">/ 3</span></td>
+      
+    </tr><tr class="">
+      <td class="dish">Salad Option</td>
+      <td class="votes">1 of 5</td>
+      <td class="avg"><strong>1.00</strong> <span class="muted">/ 3</span></td>
+      
+    </tr></tbody>
+    </table>
+    <p class="muted hidden-note">Showing the top 5 of 6 dishes these children ate.</p>
+    <p class="cc-lead">What they said:</p><ul class="cc-comments"><li>My son y4 ate 2xportions of breaded fish and one of mashed potatoes. Given he vaer very rarely eats the soup/ broth, the main course seems too small</li></ul>
+
+  <h4>What families said</h4>
+  <div class="analysis">
+    <div class="trend"><span class="tag">Trend</span><p>The breaded cod was the clear hit — one Year-4 child ate two portions, and others &#39;loved the fish and veggies&#39;. The recurring counterpoint: with the soup usually skipped, the main course alone feels too small.</p><p>Two quality / hygiene flags came up: the cups and soup bowls reportedly taste of detergent, and apples aren&#39;t always cleaned of wax. One parent also wished the children could choose their dishes like the older years do.</p></div>
+    <div class="standouts"><span class="tag">Standouts</span><ul><li><span class="dot">🟢</span> Breaded cod was a big hit — &#39;My son y4 ate 2x portions of breaded fish and one of mashed potatoes&#39; and &#39;She loved the fish and veggies.&#39;</li><li><span class="dot">🔴</span> Hygiene flag: the cups and soup bowls were said to taste of detergent.</li><li><span class="dot">🔴</span> Portion: once the soup is skipped, &#39;the main course seems too small&#39;.</li></ul></div>
+  </div>
+  <details class="comments"><summary>All comments (23)</summary><ul><li>3</li><li>1</li><li>1</li><li>Ar vrea să fie ca la copii de gimnaziu să își aleagă ce doresc să mănânce. Îi place cum arată salata cu ou care este la vânzare. O deranjează cănile și bolurile de supă  (au gust de detergent). Merele nu sunt tot timpul curățate de ceară foarte bine.</li><li>2</li><li>2</li><li>My son ate only fish and soup nothing else, he didn&#39;t like the rest of the menu.</li><li>2</li><li>3</li><li>1</li><li>2</li><li>1</li><li>My son y4 ate 2xportions of breaded fish and one of mashed potatoes. Given he vaer very rarely eats the soup/ broth, the main course seems too small</li><li>3</li><li>I didnt ated all so there will be some missing options</li><li>3</li><li>She loved the fish and veggies.</li><li>Dry meat</li><li>3</li><li>2</li><li>It was good</li><li>2</li><li>2</li></ul></details>
+</div>
+<div class="card day">
+  <div class="day-head">
+    <h3>Tuesday <span class="muted">· June 16, 2026</span></h3>
+    <span class="pill">4 responses</span>
+  </div>
+
+  <div class="scorecards">
+    <div class="sc good">
+    <div class="sc-label">How much they ate</div>
+    <div class="sc-val">1.50 / 2</div>
+    <div class="sc-meter"><span style="width:75%"></span></div>
+  </div>
+    <div class="sc good">
+    <div class="sc-label">Portion size</div>
+    <div class="sc-val">75%</div>
+    <div class="sc-sub">of the right size</div>
+    <div class="sc-meter"><span style="width:75%"></span></div>
+    <div class="sc-note">leans &quot;Too little&quot;</div>
+  </div>
+    <div class="sc good">
+    <div class="sc-label">Temperature</div>
+    <div class="sc-val">100%</div>
+    <div class="sc-sub">served just right</div>
+    <div class="sc-meter"><span style="width:100%"></span></div>
+    
+  </div>
+  </div>
+
+  <details class="dist"><summary>How much they ate — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">All of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:50%"></span></span>
+      <span class="bar-num">2 · 50%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Some of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:50%"></span></span>
+      <span class="bar-num">2 · 50%</span>
+    </div></details>
+  <details class="dist"><summary>Portion size — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Too little</span>
+      <span class="bar-track"><span class="bar-fill" style="width:25%"></span></span>
+      <span class="bar-num">1 · 25%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:75%"></span></span>
+      <span class="bar-num">3 · 75%</span>
+    </div></details>
+  <details class="dist"><summary>Temperature — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+      <span class="bar-num">3 · 100%</span>
+    </div></details>
+
+  <h4>Dish ranking <span class="muted">(best to worst · only dishes with 3+ ratings)</span></h4>
+  <table class="rank-table">
+    <thead><tr><th>#</th><th>Dish</th><th>Avg</th><th>Votes</th></tr></thead>
+    <tbody>
+    <tr class="good">
+      <td class="rank">1</td>
+      <td class="dish">Ziua de Paste / Pasta Day: Paste cu sos Ragu de pui/ Chicken Ragu Pasta Pasta Quattro Formaggi/Pasta Pesto Paste simple/Simple Pasta</td>
+      <td class="avg"><strong>2.75</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">4 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">2</td>
+      <td class="dish">Desert / Dessert: Fruct de sezon/ Seasonal fruit</td>
+      <td class="avg"><strong>2.25</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">4 ratings</td>
+    </tr>
+    <tr class="mid">
+      <td class="rank">3</td>
+      <td class="dish">Ciorbă sau supa/ Soup or Borsch: Supa crema de rosii/ Tomato Soup</td>
+      <td class="avg"><strong>1.67</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">3 ratings</td>
+    </tr></tbody>
+  </table><p class="muted hidden-note">Not ranked — fewer than 3 ratings: Salad Option (1).</p>
+
+  <h4>Cold food — what was on those plates</h4><p class="muted">No one reported cold food this day. 🎉</p>
+  <h4>Small portions — what was on those plates</h4><p class="muted">Only 1 response said the portion was too little — too few to break down.</p>
+
+  <h4>What families said</h4>
+  <div class="analysis">
+    <div class="trend"><span class="tag">Trend</span><p>Only 4 responses on pasta day — too little to read a firm trend. The chicken-ragu pasta rated well; the single comment was a neutral note that Year 4 had a chocolate doughnut for dessert.</p></div>
+    <div class="standouts"><span class="tag">Standouts</span><ul><li><span class="dot">🟢</span> The chicken-ragu pasta went down well (2.75), though on only a handful of ratings.</li></ul></div>
+  </div>
+  <details class="comments"><summary>All comments (1)</summary><ul><li>Desert for y4 they had doughnut with some chocolate</li></ul></details>
+</div>
+<div class="card day">
+  <div class="day-head">
+    <h3>Wednesday <span class="muted">· June 17, 2026</span></h3>
+    <span class="pill">8 responses</span>
+  </div>
+
+  <div class="scorecards">
+    <div class="sc mid">
+    <div class="sc-label">How much they ate</div>
+    <div class="sc-val">1.14 / 2</div>
+    <div class="sc-meter"><span style="width:57.14285714285714%"></span></div>
+  </div>
+    <div class="sc good">
+    <div class="sc-label">Portion size</div>
+    <div class="sc-val">100%</div>
+    <div class="sc-sub">of the right size</div>
+    <div class="sc-meter"><span style="width:100%"></span></div>
+    
+  </div>
+    <div class="sc mid">
+    <div class="sc-label">Temperature</div>
+    <div class="sc-val">57%</div>
+    <div class="sc-sub">served just right</div>
+    <div class="sc-meter"><span style="width:57.14285714285714%"></span></div>
+    <div class="sc-note">leans &quot;Too cold&quot;</div>
+  </div>
+  </div>
+
+  <details class="dist"><summary>How much they ate — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">All of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:14.285714285714285%"></span></span>
+      <span class="bar-num">1 · 14%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Some of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:85.71428571428571%"></span></span>
+      <span class="bar-num">6 · 86%</span>
+    </div></details>
+  <details class="dist"><summary>Portion size — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+      <span class="bar-num">7 · 100%</span>
+    </div></details>
+  <details class="dist"><summary>Temperature — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Too cold</span>
+      <span class="bar-track"><span class="bar-fill" style="width:42.857142857142854%"></span></span>
+      <span class="bar-num">3 · 43%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:57.14285714285714%"></span></span>
+      <span class="bar-num">4 · 57%</span>
+    </div></details>
+
+  <h4>Dish ranking <span class="muted">(best to worst · only dishes with 3+ ratings)</span></h4>
+  <table class="rank-table">
+    <thead><tr><th>#</th><th>Dish</th><th>Avg</th><th>Votes</th></tr></thead>
+    <tbody>
+    <tr class="good">
+      <td class="rank">1</td>
+      <td class="dish">Desert / Dessert: Gogosi / Donuts</td>
+      <td class="avg"><strong>2.80</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">5 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">2</td>
+      <td class="dish">Salad Option</td>
+      <td class="avg"><strong>2.75</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">4 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">3</td>
+      <td class="dish">Fel principal / Main course: Piept de pui la gratar/ Grilled Chicken Breast</td>
+      <td class="avg"><strong>2.50</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">6 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">4</td>
+      <td class="dish">Legume / Vegetables: Duo de fasole verde si galbena/ Green &amp; Yellow Beans</td>
+      <td class="avg"><strong>2.50</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">4 ratings</td>
+    </tr>
+    <tr class="good">
+      <td class="rank">5</td>
+      <td class="dish">Garnitură / Side dish: Cartofi wedges/Wedges potatoes</td>
+      <td class="avg"><strong>2.38</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">8 ratings</td>
+    </tr>
+    <tr class="mid">
+      <td class="rank">6</td>
+      <td class="dish">Optiune Pește / Fish Option Salau la cuptor cu lamaie/ Zander fish fillet with lemon</td>
+      <td class="avg"><strong>1.67</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">3 ratings</td>
+    </tr>
+    <tr class="bad">
+      <td class="rank">7</td>
+      <td class="dish">Ciorbă sau supă/ Borsch or Soup: Bors de pui/ Chicken Borsch</td>
+      <td class="avg"><strong>1.20</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">5 ratings</td>
+    </tr></tbody>
+  </table><p class="muted hidden-note">Not ranked — fewer than 3 ratings: Vegetarian / Vegetarian: Vinete grecesti/ Greek Eggplant (1).</p>
+
+  <h4>Cold food — what was on those plates <span class="muted">(3 responses — 3 rated the meal “Too cold”)</span></h4>
+    <table class="rank-table cc-table">
+      <thead><tr><th>Dish</th><th>In these answers</th><th>Their rating</th><th>vs overall</th></tr></thead>
+      <tbody><tr class="">
+      <td class="dish">Desert / Dessert: Gogosi / Donuts</td>
+      <td class="votes">3 of 3</td>
+      <td class="avg"><strong>2.67</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta down">-0.13</span> <span class="muted">vs 2.80</span></td>
+    </tr><tr class="">
+      <td class="dish">Garnitură / Side dish: Cartofi wedges/Wedges potatoes</td>
+      <td class="votes">3 of 3</td>
+      <td class="avg"><strong>3.00</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta up">+0.63</span> <span class="muted">vs 2.38</span></td>
+    </tr><tr class="">
+      <td class="dish">Legume / Vegetables: Duo de fasole verde si galbena/ Green &amp; Yellow Beans</td>
+      <td class="votes">2 of 3</td>
+      <td class="avg"><strong>2.50</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta ">+0.00</span> <span class="muted">vs 2.50</span></td>
+    </tr><tr class="">
+      <td class="dish">Fel principal / Main course: Piept de pui la gratar/ Grilled Chicken Breast</td>
+      <td class="votes">2 of 3</td>
+      <td class="avg"><strong>2.50</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta ">+0.00</span> <span class="muted">vs 2.50</span></td>
+    </tr><tr class="">
+      <td class="dish">Vegetarian / Vegetarian: Vinete grecesti/ Greek Eggplant</td>
+      <td class="votes">1 of 3</td>
+      <td class="avg"><strong>3.00</strong> <span class="muted">/ 3</span></td>
+      <td class="delta-cell"><span class="delta ">+0.00</span> <span class="muted">vs 3.00</span></td>
+    </tr></tbody>
+    </table>
+    <p class="muted hidden-note">Showing the top 5 of 8 dishes these children ate.</p>
+    <p class="muted">No comment named a specific dish — the table is simply what these children ate.</p>
+  <h4>Small portions — what was on those plates</h4><p class="muted">No one said the portion was too little this day. 🎉</p>
+
+  <h4>What families said</h4>
+  <div class="analysis">
+    <div class="trend"><span class="tag">Trend</span><p>A mixed day. The wedges, donuts and grilled chicken landed well, but the chicken borsch was the week&#39;s lowest-rated dish (1.20), and two quality issues came up — the fish had bones, and the grilled chicken&#39;s green herbs put one child off.</p><p>One parent noted the dessert was fruit, not the donuts on the published menu.</p></div>
+    <div class="standouts"><span class="tag">Standouts</span><ul><li><span class="dot">🔴</span> The fish had bones (&#39;Peștele a avut oase&#39;).</li><li><span class="dot">🔴</span> &#39;The grilled chicken had some green spices on it and she didn&#39;t like it.&#39;</li><li><span class="dot">🔴</span> Menu mismatch: &#39;They had fruits at dessert not donuts.&#39;</li></ul></div>
+  </div>
+  <details class="comments"><summary>All comments (3)</summary><ul><li>Peștele a avut oase</li><li>They had fruits at dessert not donuts. The grilled chicken had some green spices on it and she didn’t liked it</li><li>No</li></ul></details>
+</div>
+<div class="card day">
+  <div class="day-head">
+    <h3>Thursday <span class="muted">· June 18, 2026</span></h3>
+    <span class="pill">1 responses</span>
+  </div>
+
+  <div class="scorecards">
+    <div class="sc mid">
+    <div class="sc-label">How much they ate</div>
+    <div class="sc-val">1.00 / 2</div>
+    <div class="sc-meter"><span style="width:50%"></span></div>
+  </div>
+    <div class="sc good">
+    <div class="sc-label">Portion size</div>
+    <div class="sc-val">100%</div>
+    <div class="sc-sub">of the right size</div>
+    <div class="sc-meter"><span style="width:100%"></span></div>
+    
+  </div>
+    <div class="sc good">
+    <div class="sc-label">Temperature</div>
+    <div class="sc-val">100%</div>
+    <div class="sc-sub">served just right</div>
+    <div class="sc-meter"><span style="width:100%"></span></div>
+    
+  </div>
+  </div>
+
+  <details class="dist"><summary>How much they ate — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Some of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+      <span class="bar-num">1 · 100%</span>
+    </div></details>
+  <details class="dist"><summary>Portion size — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+      <span class="bar-num">1 · 100%</span>
+    </div></details>
+  <details class="dist"><summary>Temperature — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+      <span class="bar-num">1 · 100%</span>
+    </div></details>
+
+  <h4>Dish ranking <span class="muted">(best to worst · only dishes with 3+ ratings)</span></h4>
+  <p class="muted">No dish reached 3 ratings yet.</p><p class="muted hidden-note">Not ranked — fewer than 3 ratings: Legume / Vegetables: Legume la cuptor aromate/ Flavours Vegetables (1), Fel principal / Main course: Friptura de vita la cuptor/Oven Baked Beef Steak (1), Supa sau Ciorba / Soup or Borsch: Ciorba de vacuta taraneasca/Traditional Beef Soup (1).</p>
+
+  <h4>Cold food — what was on those plates</h4><p class="muted">No one reported cold food this day. 🎉</p>
+  <h4>Small portions — what was on those plates</h4><p class="muted">No one said the portion was too little this day. 🎉</p>
+
+  <h4>What families said</h4>
+  <div class="analysis">
+    <div class="trend"><span class="tag">Trend</span><p>Only one response and no comments on Thursday — too little to read anything into the day.</p></div>
+    
+  </div>
+  <p class="muted">No comments this day.</p>
+</div>
+<div class="card day">
+  <div class="day-head">
+    <h3>Friday <span class="muted">· June 19, 2026</span></h3>
+    <span class="pill">3 responses</span>
+  </div>
+
+  <div class="scorecards">
+    <div class="sc mid">
+    <div class="sc-label">How much they ate</div>
+    <div class="sc-val">1.33 / 2</div>
+    <div class="sc-meter"><span style="width:66.66666666666666%"></span></div>
+  </div>
+    <div class="sc good">
+    <div class="sc-label">Portion size</div>
+    <div class="sc-val">100%</div>
+    <div class="sc-sub">of the right size</div>
+    <div class="sc-meter"><span style="width:100%"></span></div>
+    
+  </div>
+    <div class="sc good">
+    <div class="sc-label">Temperature</div>
+    <div class="sc-val">100%</div>
+    <div class="sc-sub">served just right</div>
+    <div class="sc-meter"><span style="width:100%"></span></div>
+    
+  </div>
+  </div>
+
+  <details class="dist"><summary>How much they ate — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">All of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:33.33333333333333%"></span></span>
+      <span class="bar-num">1 · 33%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Some of it</span>
+      <span class="bar-track"><span class="bar-fill" style="width:66.66666666666666%"></span></span>
+      <span class="bar-num">2 · 67%</span>
+    </div></details>
+  <details class="dist"><summary>Portion size — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+      <span class="bar-num">3 · 100%</span>
+    </div></details>
+  <details class="dist"><summary>Temperature — breakdown</summary>
+    <div class="bar-row">
+      <span class="bar-label">Just right</span>
+      <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+      <span class="bar-num">3 · 100%</span>
+    </div></details>
+
+  <h4>Dish ranking <span class="muted">(best to worst · only dishes with 3+ ratings)</span></h4>
+  <table class="rank-table">
+    <thead><tr><th>#</th><th>Dish</th><th>Avg</th><th>Votes</th></tr></thead>
+    <tbody>
+    <tr class="good">
+      <td class="rank">1</td>
+      <td class="dish">Fel principal/ Main course: Chiftelute de curcan (sos separate)/ Turkey Meatballs (sauce on the side)</td>
+      <td class="avg"><strong>3.00</strong> <span class="muted">/ 3</span></td>
+      <td class="votes muted">3 ratings</td>
+    </tr></tbody>
+  </table><p class="muted hidden-note">Not ranked — fewer than 3 ratings: Ciorbă sau supă/ Soup or Borsch: Supa cu galuste/ Dumplings Soup (2), Garnitura/ Side Dish: Piure din Cartofi/ Mashed Potatoes (2), Optiune Pește / Fish Option: File de salau Mediteranean/ Mediterranean Zander fish Fillet (1).</p>
+
+  <h4>Cold food — what was on those plates</h4><p class="muted">No one reported cold food this day. 🎉</p>
+  <h4>Small portions — what was on those plates</h4><p class="muted">No one said the portion was too little this day. 🎉</p>
+
+  <h4>What families said</h4>
+  <div class="analysis">
+    <div class="trend"><span class="tag">Trend</span><p>Light turnout (3 responses) but positive: children ate well — one had the soup, the turkey schnitzel with mashed potatoes, and went back for a second schnitzel.</p></div>
+    <div class="standouts"><span class="tag">Standouts</span><ul><li><span class="dot">🟢</span> Ate well and went back for seconds — &#39;[child] ate both the soup and the snitzel with smashed potatoes. She got a second snitzel as well.&#39;</li><li><span class="dot">🟢</span> &#39;She liked this menu.&#39;</li></ul></div>
+  </div>
+  <details class="comments"><summary>All comments (2)</summary><ul><li>Today [child] ate both the soup and the snitzel with smashed potatoes. She got a second snitzel as well.</li><li>She liked this menu</li></ul></details>
+</div>
+</section>
+
+<section class="part">
+  <h2 class="part-title">Part 2 — The whole week</h2>
+  <div class="card placeholder">
+    <p>The weekly roll-up comes next — we'll build it after checking these daily numbers look right.</p>
+  </div>
+</section>
+
+<footer class="page-foot">
+  <p>Scores are computed from the form responses; the “What families said” reads are written by hand each week. Children's names in comments are replaced with <code>[child]</code> for privacy.</p>
+</footer>
+</body>
+</html>
